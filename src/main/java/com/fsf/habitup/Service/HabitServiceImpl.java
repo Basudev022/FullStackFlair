@@ -1,15 +1,18 @@
 package com.fsf.habitup.Service;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+
 import com.fsf.habitup.Repository.HabitRepo;
 import com.fsf.habitup.Repository.UserRepository;
 import com.fsf.habitup.entity.Habit;
 import com.fsf.habitup.entity.User;
+
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
 @Service
 public class HabitServiceImpl implements HabitService {
 
@@ -54,7 +57,6 @@ public class HabitServiceImpl implements HabitService {
 
         // 6. Save and return
         return habitRepository.save(userHabit);
-
 
     }
 

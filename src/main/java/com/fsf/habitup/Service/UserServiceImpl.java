@@ -1,17 +1,11 @@
 package com.fsf.habitup.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-import com.fsf.habitup.DTO.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +13,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fsf.habitup.DTO.AuthResponse;
+import com.fsf.habitup.DTO.ForgetPasswordRequest;
+import com.fsf.habitup.DTO.LoginRequest;
+import com.fsf.habitup.DTO.LogoutResponse;
+import com.fsf.habitup.DTO.OtpRegisterRequest;
+import com.fsf.habitup.DTO.OtpVerificationReuest;
+import com.fsf.habitup.DTO.RegisterRequest;
+import com.fsf.habitup.DTO.UpdateUserDTO;
 import com.fsf.habitup.Enums.AccountStatus;
 import com.fsf.habitup.Enums.SubscriptionType;
 import com.fsf.habitup.Enums.UserType;
@@ -32,7 +35,6 @@ import com.fsf.habitup.entity.User;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -123,10 +125,9 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(registerRequest.getEmail()) != null) {
             return "This email is already registered. Please log in.";
         }
-        if (userRepository.existsByPhoneNo(Long.parseLong(registerRequest.getPhoneNo()))) {
+        if (userRepository.existsByPhoneNo(Long.valueOf(registerRequest.getPhoneNo()))) {
             return "This phone number is already registered. Please use another number.";
         }
-
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -151,7 +152,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setPhoneNo(Long.parseLong(registerRequest.getPhoneNo()));
+        user.setPhoneNo(Long.valueOf(registerRequest.getPhoneNo()));
         user.setSubscriptionType(SubscriptionType.FREE);
         user.setGender(registerRequest.getGender());
         user.setAccountStatus(AccountStatus.ACTIVE);
@@ -160,7 +161,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return "Registration successful!";
     }
-
 
     @Override
     public AuthResponse authenticateUser(LoginRequest request) {
@@ -176,7 +176,6 @@ public class UserServiceImpl implements UserService {
 
         // Generate JWT Token
         String token = jwtTokenProvider.generateToken(request.getEmail());
-
 
         return new AuthResponse(token, user);
     }
@@ -203,8 +202,6 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(existingUser);
     }
-
-
 
     @Override
     public User findUserByEmail(String email) {

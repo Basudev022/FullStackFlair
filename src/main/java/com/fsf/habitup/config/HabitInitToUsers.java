@@ -1,25 +1,25 @@
 package com.fsf.habitup.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
 import com.fsf.habitup.Enums.HabitCategory;
 import com.fsf.habitup.Repository.HabitRepo;
 import com.fsf.habitup.Repository.UserRepository;
 import com.fsf.habitup.entity.Habit;
 import com.fsf.habitup.entity.User;
-import jakarta.transaction.Transactional;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import jakarta.transaction.Transactional;
 
 @Component
-public class HabitInitToUsers  implements CommandLineRunner {
-        private final UserRepository userRepository;
-        private final HabitRepo habitRepository;
+public class HabitInitToUsers implements CommandLineRunner {
+    private final UserRepository userRepository;
+    private final HabitRepo habitRepository;
 
     public HabitInitToUsers(UserRepository userRepository, HabitRepo habitRepository) {
         this.userRepository = userRepository;
@@ -31,9 +31,7 @@ public class HabitInitToUsers  implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // 1. Create default habits if none exist
         List<Habit> existingHabits = habitRepository.findAll();
-        List<Habit> habitsToAssign = existingHabits.isEmpty() ?
-                createDefaultHabits() :
-                new ArrayList<>(existingHabits);
+        List<Habit> habitsToAssign = existingHabits.isEmpty() ? createDefaultHabits() : new ArrayList<>(existingHabits);
 
         // 2. Assign all habits to all users
         List<User> users = userRepository.findAll();
@@ -60,8 +58,7 @@ public class HabitInitToUsers  implements CommandLineRunner {
                             habit.setHabitDuration(getDefaultDuration(category)); // Add this
                             return habit;
                         })
-                        .collect(Collectors.toList())
-        );
+                        .collect(Collectors.toList()));
     }
 
     private String getDefaultDescription(HabitCategory category) {
@@ -69,7 +66,7 @@ public class HabitInitToUsers  implements CommandLineRunner {
             case MEDITATION -> "Daily meditation practice";
             case READING -> "Reading for personal growth";
             case EXERCISE_AND_YOGA -> "Physical exercise and yoga";
-            //have to add other category
+            // have to add other category
             default -> category.getDisplayName() + " activity";
         };
     }
@@ -83,6 +80,5 @@ public class HabitInitToUsers  implements CommandLineRunner {
             default -> 20;
         };
     }
-
 
 }

@@ -2,8 +2,20 @@ package com.fsf.habitup.entity;
 
 import java.util.Date;
 
+import com.fsf.habitup.Enums.PaymentStatus;
+import com.fsf.habitup.Enums.RenewalStatus;
 import com.fsf.habitup.Enums.SubscriptionType;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "subscription")
@@ -18,9 +30,6 @@ public class Subscription {
     @JoinColumn(name = "userId", referencedColumnName = "userId", unique = true)
     private User user;
 
-    @Column(name = "planName", nullable = false, unique = false)
-    private String planName;
-
     @Column(name = "price", nullable = false, unique = false)
     private int price;
 
@@ -30,23 +39,18 @@ public class Subscription {
     @Column(name = "endDate", nullable = false, unique = false)
     private Date endDate;
 
-    @Column(name = "paymentMethod", nullable = false, unique = false)
-    private String paymentMethod;
-
     @Column(name = "paymentStatus", nullable = false, unique = false)
-    private String paymentStatus;
+    private PaymentStatus paymentStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "renewalStatus", nullable = false, unique = false)
-    private String renewalStatus;
+    private RenewalStatus renewalStatus;
 
     @Column(name = "createdAt", nullable = false, unique = false)
     private Date createdAt;
 
     @Column(name = "updatedAt", nullable = false, unique = false)
     private Date updatedAt;
-
-    @Column(name = "status", nullable = false, unique = false)
-    private String status;
 
     public SubscriptionType getSubscriptionType() {
         return subscriptionType;
@@ -76,30 +80,6 @@ public class Subscription {
         this.createdAt = createdAt;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public String getPlanName() {
-        return planName;
-    }
-
-    public void setPlanName(String planName) {
-        this.planName = planName;
-    }
-
     public int getPrice() {
         return price;
     }
@@ -108,28 +88,12 @@ public class Subscription {
         this.price = price;
     }
 
-    public String getRenewalStatus() {
-        return renewalStatus;
-    }
-
-    public void setRenewalStatus(String renewalStatus) {
-        this.renewalStatus = renewalStatus;
-    }
-
     public Date getStartDate() {
         return startDate;
     }
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public Long getSubscription_Id() {
@@ -154,5 +118,21 @@ public class Subscription {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public RenewalStatus getRenewalStatus() {
+        return renewalStatus;
+    }
+
+    public void setRenewalStatus(RenewalStatus renewalStatus) {
+        this.renewalStatus = renewalStatus;
     }
 }

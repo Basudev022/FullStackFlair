@@ -1,6 +1,5 @@
 package com.fsf.habitup.DTO;
 
-import com.fsf.habitup.Enums.DocumentStatus;
 import com.fsf.habitup.entity.Documents;
 
 public class DocumentDTO {
@@ -10,7 +9,6 @@ public class DocumentDTO {
     private String documentType;
     private String documentUrl;
     private Long userId;
-
 
     public static DocumentDTO fromEntity(Documents document) {
         DocumentDTO dto = new DocumentDTO();

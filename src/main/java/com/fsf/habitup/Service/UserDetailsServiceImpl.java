@@ -1,15 +1,8 @@
 package com.fsf.habitup.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fsf.habitup.Enums.UserType;
-import com.fsf.habitup.Repository.AdminRepository;
-import com.fsf.habitup.Repository.DoctorRepository;
-import com.fsf.habitup.entity.Admin;
-import com.fsf.habitup.entity.Doctor;
-import com.fsf.habitup.entity.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +11,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.fsf.habitup.Enums.UserType;
+import com.fsf.habitup.Repository.AdminRepository;
+import com.fsf.habitup.Repository.DoctorRepository;
 import com.fsf.habitup.Repository.UserRepository;
+import com.fsf.habitup.entity.Admin;
+import com.fsf.habitup.entity.Doctor;
+import com.fsf.habitup.entity.Permission;
 import com.fsf.habitup.entity.User;
 
 @Service
@@ -29,7 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final DoctorRepository doctorRepository;
     private final AdminRepository adminRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, DoctorRepository doctorRepository, AdminRepository adminRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, DoctorRepository doctorRepository,
+            AdminRepository adminRepository) {
         this.userRepository = userRepository;
         this.doctorRepository = doctorRepository;
         this.adminRepository = adminRepository;
@@ -43,7 +43,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(
                     user.getEmail(),
                     user.getPassword(),
-                    getAuthorities(user.getPermissions(), user.getUserType())  // Pass UserType.User for regular users
+                    getAuthorities(user.getPermissions(), user.getUserType()) // Pass UserType.User for regular users
             );
         }
 
@@ -54,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(
                     doctor.getEmail(),
                     doctor.getPassword(),
-                    getAuthorities(doctor.getPermissions(), UserType.Doctor)  // Pass UserType.Doctor for doctors
+                    getAuthorities(doctor.getPermissions(), UserType.Doctor) // Pass UserType.Doctor for doctors
             );
         }
 
@@ -65,7 +65,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(
                     admin.getEmail(),
                     admin.getPassword(),
-                    getAuthorities(admin.getPermissions(), UserType.Admin)  // Pass UserType.Admin for admins
+                    getAuthorities(admin.getPermissions(), UserType.Admin) // Pass UserType.Admin for admins
             );
         }
 
@@ -78,16 +78,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // Loop through each permission and assign it as a granted authority
         for (Permission permission : permissions) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + permission.getName().name()));  // Add permission as authority
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + permission.getName().name())); // Add permission as
+                                                                                                // authority
         }
 
         // Add user type-based roles
         if (userType == UserType.Admin) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));  // Add ROLE_ADMIN for admins
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // Add ROLE_ADMIN for admins
         } else if (userType == UserType.Doctor) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));  // Add ROLE_DOCTOR for doctors
+            authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR")); // Add ROLE_DOCTOR for doctors
         } else {
-            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));  // Default role for all users
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER")); // Default role for all users
         }
 
         return authorities;

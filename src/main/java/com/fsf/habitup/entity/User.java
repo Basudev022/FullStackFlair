@@ -5,10 +5,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fsf.habitup.Enums.AccountStatus;
 import com.fsf.habitup.Enums.Gender;
 import com.fsf.habitup.Enums.SubscriptionType;
@@ -28,7 +24,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user")
-public class User  {
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "UserId", unique = true, nullable = false)
@@ -85,11 +81,7 @@ public class User  {
 	}
 
 	@ManyToMany
-	@JoinTable(
-			name = "user_habits",
-			joinColumns = @JoinColumn(name = "userId"),
-			inverseJoinColumns = @JoinColumn(name = "habitId")
-	)
+	@JoinTable(name = "user_habits", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "habitId"))
 	@JsonManagedReference
 	@JsonIgnore
 	private Set<Habit> habits = new HashSet<>();
@@ -202,7 +194,5 @@ public class User  {
 	public void setPermissions(Set<Permission> permissions) {
 		this.permissions = permissions;
 	}
-
-
 
 }

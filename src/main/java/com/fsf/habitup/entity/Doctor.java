@@ -4,11 +4,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fsf.habitup.Enums.AccountStatus;
 import com.fsf.habitup.Enums.DocumentStatus;
 import com.fsf.habitup.Enums.Gender;
@@ -29,13 +24,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "doctor")
-public class Doctor  {
+public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "doctorId", nullable = false, unique = true)
     private Long doctorId;
-
 
     @Column(name = "password", nullable = false)
     public String password;
@@ -135,7 +129,6 @@ public class Doctor  {
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
     }
-
 
     public Gender getGender() {
         return gender;

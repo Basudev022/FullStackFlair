@@ -1,7 +1,6 @@
 package com.fsf.habitup.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import com.fsf.habitup.Enums.HabitCompletionStatus;
 
@@ -52,13 +51,13 @@ public class HabitProgress {
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
-
     @Column(name = "notes")
     private String notes; // Added notes field
 
     @ManyToOne
     @JoinColumn(name = "habitId", nullable = false)
     private Habit habit;
+
     /**
      * @return Long return the progressId
      */
@@ -118,7 +117,6 @@ public class HabitProgress {
     /**
      * @return Date return the progressStratingDate
      */
-
 
     /**
      * @return User return the user
